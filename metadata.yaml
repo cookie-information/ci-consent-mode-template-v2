@@ -1,5 +1,7 @@
 homepage: "https://cookieinformation.com/"
 documentation: "https://support.cookieinformation.com/en/"
 versions:
+  - sha: 74f313c68007f3b8051a85e843d6eb920f2b60d9
+    changeNotes: Template setup, default and update events management.
   - sha: 14388cc9b1c043ee263413dae53090ee6db29a22
     changeNotes: Initial release.

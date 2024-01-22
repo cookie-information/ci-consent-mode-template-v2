@@ -1,0 +1,1 @@
+# ci-consent-mode-template-v2

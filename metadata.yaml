@@ -1,0 +1,5 @@
+homepage: "https://cookieinformation.com/"
+documentation: "https://support.cookieinformation.com/en/"
+versions:
+  - sha: 14388cc9b1c043ee263413dae53090ee6db29a22
+    changeNotes: Initial release.

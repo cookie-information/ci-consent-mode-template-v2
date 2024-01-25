@@ -18,7 +18,7 @@ ___INFO___
     "id": "brand_dummy",
     "displayName": ""
   },
-  "description": "Adjust behaviour of Google Tags (advertising, analytics, and use of cookies) based on user consent choice using Google\u0027s Consent API.",
+  "description": "Adjust behaviour of Google Tags (advertising, analytics, and use of cookies) based on user consent choice using Google Consent Mode v2.",
   "containerContexts": [
     "WEB"
   ]
@@ -28,6 +28,13 @@ ___INFO___
 ___TEMPLATE_PARAMETERS___
 
 [
+  {
+    "type": "CHECKBOX",
+    "name": "inject_script",
+    "checkboxText": "Add Cookie Information Consent Banner",
+    "simpleValueType": true,
+    "help": "If you have already added the consent banner script to your website code, leave this option unticked and add data-gcm-enabled\u003d\"false\" to your banner script placed on the website."
+  },
   {
     "type": "CHECKBOX",
     "name": "ads_data_redaction",
@@ -164,8 +171,216 @@ ___TEMPLATE_PARAMETERS___
           "simpleValueType": true
         },
         "isUnique": false
+      },
+      {
+        "param": {
+          "type": "TEXT",
+          "name": "region",
+          "displayName": "Region(s) (leave blank to have consent apply to all regions)",
+          "simpleValueType": true,
+          "help": "If you\u0027d like to set the same custom settings for more than one region, you can write multiple region codes separated by comma (e.g. ES,US,DA)",
+          "valueHint": "E.g. DA,EN,US"
+        },
+        "isUnique": true
       }
     ]
+  },
+  {
+    "type": "SELECT",
+    "name": "language",
+    "displayName": "Language",
+    "macrosInSelect": false,
+    "selectItems": [
+      {
+        "value": "SQ",
+        "displayValue": "Albanian"
+      },
+      {
+        "value": "AR",
+        "displayValue": "Arabic"
+      },
+      {
+        "value": "BG",
+        "displayValue": "Bulgarian"
+      },
+      {
+        "value": "CA",
+        "displayValue": "Catalan"
+      },
+      {
+        "value": "ZH",
+        "displayValue": "Chinese"
+      },
+      {
+        "value": "TW",
+        "displayValue": "Chinese (Taiwan)"
+      },
+      {
+        "value": "HR",
+        "displayValue": "Croatian"
+      },
+      {
+        "value": "CS",
+        "displayValue": "Czech"
+      },
+      {
+        "value": "DA",
+        "displayValue": "Danish"
+      },
+      {
+        "value": "NL",
+        "displayValue": "Dutch"
+      },
+      {
+        "value": "EN",
+        "displayValue": "English"
+      },
+      {
+        "value": "ET",
+        "displayValue": "Estonian"
+      },
+      {
+        "value": "FI",
+        "displayValue": "Finnish"
+      },
+      {
+        "value": "FR",
+        "displayValue": "French"
+      },
+      {
+        "value": "DE",
+        "displayValue": "German"
+      },
+      {
+        "value": "EL",
+        "displayValue": "Greek"
+      },
+      {
+        "value": "KL",
+        "displayValue": "Greenlandic"
+      },
+      {
+        "value": "HE",
+        "displayValue": "Hebrew"
+      },
+      {
+        "value": "HI",
+        "displayValue": "Hindi"
+      },
+      {
+        "value": "HU",
+        "displayValue": "Hungarian"
+      },
+      {
+        "value": "IS",
+        "displayValue": "Icelandic"
+      },
+      {
+        "value": "ID",
+        "displayValue": "Indonesian"
+      },
+      {
+        "value": "IT",
+        "displayValue": "Italian"
+      },
+      {
+        "value": "JA",
+        "displayValue": "Japanese"
+      },
+      {
+        "value": "KO",
+        "displayValue": "Korean"
+      },
+      {
+        "value": "LV",
+        "displayValue": "Latvian"
+      },
+      {
+        "value": "LT",
+        "displayValue": "Lithuanian"
+      },
+      {
+        "value": "MS",
+        "displayValue": "Malay"
+      },
+      {
+        "value": "NB",
+        "displayValue": "Norwegian Bokmål"
+      },
+      {
+        "value": "NO",
+        "displayValue": "Norwegian macrolanguage"
+      },
+      {
+        "value": "NN",
+        "displayValue": "Norwegian nynorsk"
+      },
+      {
+        "value": "PL",
+        "displayValue": "Polish"
+      },
+      {
+        "value": "PT",
+        "displayValue": "Portugese"
+      },
+      {
+        "value": "RO",
+        "displayValue": "Romanian"
+      },
+      {
+        "value": "RU",
+        "displayValue": "Russian"
+      },
+      {
+        "value": "SR",
+        "displayValue": "Serbian"
+      },
+      {
+        "value": "SK",
+        "displayValue": "Slovak"
+      },
+      {
+        "value": "SL",
+        "displayValue": "Slovenian"
+      },
+      {
+        "value": "ES",
+        "displayValue": "Spanish"
+      },
+      {
+        "value": "SV",
+        "displayValue": "Swedish"
+      },
+      {
+        "value": "TH",
+        "displayValue": "Thai"
+      },
+      {
+        "value": "TR",
+        "displayValue": "Turkish"
+      },
+      {
+        "value": "UK",
+        "displayValue": "Ukrainian"
+      },
+      {
+        "value": "VI",
+        "displayValue": "Vietnamese"
+      }
+    ],
+    "simpleValueType": true
+  },
+  {
+    "type": "TEXT",
+    "name": "wait_for_update",
+    "displayName": "Wait for update",
+    "simpleValueType": true,
+    "valueValidators": [
+      {
+        "type": "NON_NEGATIVE_NUMBER"
+      }
+    ],
+    "defaultValue": 500
   }
 ]
 
@@ -177,9 +392,11 @@ const updateConsentState = require('updateConsentState');
 const callInWindow = require('callInWindow');
 const gtagSet = require('gtagSet');
 const getCookieValues = require('getCookieValues');
-const log = require('logToConsole');
 const JSON = require('JSON');
-
+const makeInteger = require('makeInteger');
+const injectScript = require('injectScript');
+const encodeUriComponent = require('encodeUriComponent');
+const queryPermission = require('queryPermission');
 /*
  *   Called when consent changes. Assumes that consent object contains keys which
  *   directly correspond to Google consent types.
@@ -190,7 +407,6 @@ const onUserConsent = (consent) => {
   const functionalityStorage = consent.cookie_cat_functional ? 'granted' : 'denied';
   const personalizationStorage = consent.cookie_cat_functional ? 'granted' : 'denied';
   const securityStorage = 'granted';
-
   const consentModeStates = {
     ad_storage: marketingConsent,
     ad_user_data: marketingConsent,
@@ -200,7 +416,6 @@ const onUserConsent = (consent) => {
     personalization_storage: personalizationStorage,
     security_storage: securityStorage,
   };
-
   updateConsentState(consentModeStates);
   if (data.ads_data_redaction && marketingConsent === 'denied') {
     gtagSet('ads_data_redaction', true);
@@ -208,91 +423,84 @@ const onUserConsent = (consent) => {
   gtagSet('url_passthrough', data.url_passthrough);
   gtagSet('developer_id.dNmIyNz', true);
 };
+const setSettings = (rowSetting) => ({
+  ad_storage: rowSetting.ad_storage || 'denied',
+  ad_user_data: rowSetting.ad_user_data || 'denied',
+  ad_personalization: rowSetting.ad_personalization || 'denied',
+  analytics_storage: rowSetting.analytics_storage || 'denied',
+  functionality_storage: rowSetting.functionality_storage || 'denied',
+  personalization_storage: rowSetting.personalization_storage || 'denied',
+  security_storage: rowSetting.security_storage || 'denied',
+  wait_for_update: makeInteger(data.wait_for_update) || 500,
+});
+const handleDefaultsSettingsWithRegions = (settingsRows) => {
+    let isGlobalRegionsDefaultsSet = false;
+     settingsRows.forEach((row) => {
+     let settings = {};
+     // means that user adjusted global defaults - for rest regions
+     if(row.region.trim() === '') {
+       isGlobalRegionsDefaultsSet = true;
+       settings = setSettings(row);
+     } else {
+       settings = setSettings(row);
+       settings.region = row.region.split(",").map(el => el.trim());
+    }
+    setDefaultConsentState(settings);
+   });
+   if(isGlobalRegionsDefaultsSet === false) {
+     let globalDefaultSettings = {};
+     globalDefaultSettings = setSettings({});
+     setDefaultConsentState(globalDefaultSettings);
+   }
+};
 /*
  *   Executes the default command, sets the developer ID, and sets up the consent
  *   update callback
  */
-const main = (data) => {
-  // Set default consent state(s)
-  const defaultSettings = (data.defaultSettings && data.defaultSettings[0]) ? data.defaultSettings[0] : {
-    ad_storage: 'denied',
-    ad_user_data: 'denied',
-    ad_personalization: 'denied',
-    analytics_storage: 'denied',
-    functionality_storage: 'denied',
-    personalization_storage: 'denied',
-    security_storage: 'denied',
-    wait_for_update: 500,
-  };
-
-  setDefaultConsentState(defaultSettings);
+const main = () => {
+ const defaultSettings = data.defaultSettings || [];
+  if(defaultSettings.length > 0) {
+    handleDefaultsSettingsWithRegions(defaultSettings);
+  } else {
+    let defaultSettings = {};
+    defaultSettings = setSettings({});
+    setDefaultConsentState(defaultSettings);
+  }
   /*
    * Optional settings using gtagSet
    */
   if (data.ads_data_redaction) {
     gtagSet('ads_data_redaction', true);
   }
-
   gtagSet('url_passthrough', data.url_passthrough);
   gtagSet('developer_id.dNmIyNz', true);
-
   if (getCookieValues("CookieInformationConsent").toString() !== '') {
       const consentString = getCookieValues("CookieInformationConsent")[0];
       const consent = JSON.parse(consentString);
       const consentsApproved = consent.consents_approved;
       let consentTypes = {};
       let category = '';
-
       for (let i = 0; i < consentsApproved.length; ++i) {
         category = consentsApproved[i];
         consentTypes[category] = true;
       }
       onUserConsent(consentTypes);
    }
-
-  /**
-   *   Add event listener to trigger update when consent changes
-   *
-   *   References an external method on the window object which accepts a
-   *   function as an argument. If you do not have such a method, you will need
-   *   to create one before continuing. This method should add the function
-   *   that is passed as an argument as a callback for an event emitted when
-   *   the user updates their consent. The callback should be called with an
-   *   object containing fields that correspond to the five built-in Google
-   *   consent types.
-   */
-
   callInWindow('CookieInformation.addCustomEventListenerForGTMConsentModeTemplate', onUserConsent);
+  data.gtmOnSuccess();
 };
-
-main(data);
-data.gtmOnSuccess();
+if (data.inject_script) {
+  const scriptUrl = 'https://policy.app.cookieinformation.com/uc.js?language=' + encodeUriComponent(data.language || 'default') + '&gcmEnabledByConsentLibrary=false';
+  if(queryPermission('inject_script', scriptUrl)) injectScript(scriptUrl, main, data.gtmOnFailure);
+  else data.gtmOnFailure();
+} else {
+    main(data);
+}
 
 
 ___WEB_PERMISSIONS___
 
 [
-  {
-    "instance": {
-      "key": {
-        "publicId": "logging",
-        "versionId": "1"
-      },
-      "param": [
-        {
-          "key": "environments",
-          "value": {
-            "type": 1,
-            "string": "debug"
-          }
-        }
-      ]
-    },
-    "clientAnnotations": {
-      "isEditedByUser": true
-    },
-    "isRequired": true
-  },
   {
     "instance": {
       "key": {
@@ -737,6 +945,32 @@ ___WEB_PERMISSIONS___
       "isEditedByUser": true
     },
     "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "inject_script",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "urls",
+          "value": {
+            "type": 2,
+            "listItem": [
+              {
+                "type": 1,
+                "string": "https://*.cookieinformation.com/"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
   }
 ]
 
@@ -748,6 +982,4 @@ scenarios: []
 
 ___NOTES___
 
-Created on 22.01.2024, 15:26:05
-
-
+Created on 25.01.2024, 12:28:56

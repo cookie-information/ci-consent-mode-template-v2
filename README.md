@@ -1,3 +1,3 @@
-# Google Consent Mode version 2 template for Google Tag Manager
+# Cookie Information + Consent Mode v2
 
-Adjust behaviour of Google Tags (advertising, analytics, and use of cookies) based on user consent choice using Google's Consent API.
+Collect user consent and share the signals correctly with Google to ensure the well-functioning of your Google Ads, Google Analytics, and Google Marketing Platform in EEA region. Ensure compliance with ePrivacy regulations while keeping your valued marketing insights.

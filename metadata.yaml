@@ -1,6 +1,8 @@
 homepage: "https://cookieinformation.com/"
 documentation: "https://support.cookieinformation.com/en/"
 versions:
+  - sha: f0004c012350235508fc7af466b31845f21999c2
+    changeNotes: Added multi-language support
   - sha: 160d3a02318c59e392fa9d25437ff3496a707d10
     changeNotes: Added support for Consent Mode v2
   - sha: 4d9e3d6af380f973a378a2db391c4bb0bfaee2ed

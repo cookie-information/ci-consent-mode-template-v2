@@ -11,7 +11,7 @@ ___INFO___
 {
   "type": "TAG",
   "id": "cookieinformation",
-  "version": 1,
+  "version": 2,
   "securityGroups": [],
   "displayName": "Cookie Information + Consent Mode v2",
   "brand": {
@@ -37,160 +37,282 @@ ___TEMPLATE_PARAMETERS___
     "help": "If you have already added the consent banner script to your website code, leave this option unticked and add data-gcm-enabled\u003d\"false\" to your banner script placed on the website."
   },
   {
-    "type": "CHECKBOX",
-    "name": "ads_data_redaction",
-    "checkboxText": "Redact Ads Data",
-    "simpleValueType": true
-  },
-  {
-    "type": "CHECKBOX",
-    "name": "url_passthrough",
-    "checkboxText": "Pass through URL parameters",
-    "simpleValueType": true
-  },
-  {
-    "type": "PARAM_TABLE",
-    "name": "defaultSettings",
-    "displayName": "Default settings",
-    "paramTableColumns": [
+    "type": "RADIO",
+    "name": "language_settings",
+    "displayName": "Language options",
+    "radioItems": [
       {
-        "param": {
-          "type": "SELECT",
-          "name": "ad_user_data",
-          "displayName": "Ad user data",
-          "macrosInSelect": false,
-          "selectItems": [
-            {
-              "value": "denied",
-              "displayValue": "denied"
-            },
-            {
-              "value": "granted",
-              "displayValue": "granted"
-            }
-          ],
-          "simpleValueType": true
-        },
-        "isUnique": false
+        "value": "none",
+        "displayValue": "None (Default language value will be used)"
       },
       {
-        "param": {
-          "type": "SELECT",
-          "name": "ad_personalization",
-          "displayName": "Ad personalization",
-          "macrosInSelect": false,
-          "selectItems": [
-            {
-              "value": "denied",
-              "displayValue": "denied"
-            },
-            {
-              "value": "granted",
-              "displayValue": "granted"
-            }
-          ],
-          "simpleValueType": true
-        },
-        "isUnique": false
+        "value": "language_custom",
+        "displayValue": "By GTM variable",
+        "subParams": [
+          {
+            "type": "SELECT",
+            "name": "language_custom",
+            "displayName": "",
+            "macrosInSelect": true,
+            "selectItems": [],
+            "simpleValueType": true,
+            "enablingConditions": [
+              {
+                "paramName": "language_settings",
+                "paramValue": "language_custom",
+                "type": "EQUALS"
+              }
+            ]
+          }
+        ]
       },
       {
-        "param": {
-          "type": "SELECT",
-          "name": "ad_storage",
-          "displayName": "Ad storage",
-          "macrosInSelect": false,
-          "selectItems": [
-            {
-              "value": "denied",
-              "displayValue": "denied"
-            },
-            {
-              "value": "granted",
-              "displayValue": "granted"
-            }
-          ],
-          "simpleValueType": true
-        },
-        "isUnique": false
-      },
-      {
-        "param": {
-          "type": "SELECT",
-          "name": "analytics_storage",
-          "displayName": "Analytics storage",
-          "macrosInSelect": false,
-          "selectItems": [
-            {
-              "value": "denied",
-              "displayValue": "denied"
-            },
-            {
-              "value": "granted",
-              "displayValue": "granted"
-            }
-          ],
-          "simpleValueType": true
-        },
-        "isUnique": false
-      },
-      {
-        "param": {
-          "type": "SELECT",
-          "name": "functionality_storage",
-          "displayName": "Functionality storage",
-          "macrosInSelect": false,
-          "selectItems": [
-            {
-              "value": "denied",
-              "displayValue": "denied"
-            },
-            {
-              "value": "granted",
-              "displayValue": "granted"
-            }
-          ],
-          "simpleValueType": true
-        },
-        "isUnique": false
-      },
-      {
-        "param": {
-          "type": "SELECT",
-          "name": "personalization_storage",
-          "displayName": "Personalization storage",
-          "macrosInSelect": false,
-          "selectItems": [
-            {
-              "value": "denied",
-              "displayValue": "denied"
-            },
-            {
-              "value": "granted",
-              "displayValue": "granted"
-            }
-          ],
-          "simpleValueType": true
-        },
-        "isUnique": false
-      },
-      {
-        "param": {
-          "type": "TEXT",
-          "name": "region",
-          "displayName": "Region(s) (leave blank to have consent apply to all regions)",
-          "simpleValueType": true,
-          "help": "If you\u0027d like to set the same custom settings for more than one region, you can write multiple region codes separated by comma (e.g. ES,US,DA)",
-          "valueHint": "E.g. DA,EN,US"
-        },
-        "isUnique": true
+        "value": "different_for_specific_domain",
+        "displayValue": "Different language for specific domain",
+        "subParams": [
+          {
+            "type": "SIMPLE_TABLE",
+            "name": "different_for_specific_domain",
+            "displayName": "Language for specific domain",
+            "simpleTableColumns": [
+              {
+                "defaultValue": "",
+                "displayName": "Domain",
+                "name": "domain_column",
+                "type": "TEXT",
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  },
+                  {
+                    "type": "REGEX",
+                    "args": [
+                      "^(?!.*(?:http:\\/\\/|https:\\/\\/|www\\.|www)).*$"
+                    ],
+                    "errorMessage": "The value must be a canonical domain. See language options hint."
+                  }
+                ],
+                "isUnique": true,
+                "valueHint": ""
+              },
+              {
+                "defaultValue": "EN",
+                "displayName": "Language",
+                "name": "language_column",
+                "type": "SELECT",
+                "selectItems": [
+                  {
+                    "value": "SQ",
+                    "displayValue": "Albanian"
+                  },
+                  {
+                    "value": "AR",
+                    "displayValue": "Arabic"
+                  },
+                  {
+                    "value": "BG",
+                    "displayValue": "Bulgarian"
+                  },
+                  {
+                    "value": "CA",
+                    "displayValue": "Catalan"
+                  },
+                  {
+                    "value": "ZH",
+                    "displayValue": "Chinese"
+                  },
+                  {
+                    "value": "TW",
+                    "displayValue": "Chinese (Taiwan)"
+                  },
+                  {
+                    "value": "HR",
+                    "displayValue": "Croatian"
+                  },
+                  {
+                    "value": "CS",
+                    "displayValue": "Czech"
+                  },
+                  {
+                    "value": "DA",
+                    "displayValue": "Danish"
+                  },
+                  {
+                    "value": "NL",
+                    "displayValue": "Dutch"
+                  },
+                  {
+                    "value": "EN",
+                    "displayValue": "English"
+                  },
+                  {
+                    "value": "ET",
+                    "displayValue": "Estonian"
+                  },
+                  {
+                    "value": "FI",
+                    "displayValue": "Finnish"
+                  },
+                  {
+                    "value": "FR",
+                    "displayValue": "French"
+                  },
+                  {
+                    "value": "DE",
+                    "displayValue": "German"
+                  },
+                  {
+                    "value": "EL",
+                    "displayValue": "Greek"
+                  },
+                  {
+                    "value": "KL",
+                    "displayValue": "Greenlandic"
+                  },
+                  {
+                    "value": "HE",
+                    "displayValue": "Hebrew"
+                  },
+                  {
+                    "value": "HI",
+                    "displayValue": "Hindi"
+                  },
+                  {
+                    "value": "HU",
+                    "displayValue": "Hungarian"
+                  },
+                  {
+                    "value": "IS",
+                    "displayValue": "Icelandic"
+                  },
+                  {
+                    "value": "ID",
+                    "displayValue": "Indonesian"
+                  },
+                  {
+                    "value": "IT",
+                    "displayValue": "Italian"
+                  },
+                  {
+                    "value": "JA",
+                    "displayValue": "Japanese"
+                  },
+                  {
+                    "value": "KO",
+                    "displayValue": "Korean"
+                  },
+                  {
+                    "value": "LV",
+                    "displayValue": "Latvian"
+                  },
+                  {
+                    "value": "LT",
+                    "displayValue": "Lithuanian"
+                  },
+                  {
+                    "value": "MS",
+                    "displayValue": "Malay"
+                  },
+                  {
+                    "value": "NB",
+                    "displayValue": "Norwegian Bokmål"
+                  },
+                  {
+                    "value": "NO",
+                    "displayValue": "Norwegian macrolanguage"
+                  },
+                  {
+                    "value": "NN",
+                    "displayValue": "Norwegian nynorsk"
+                  },
+                  {
+                    "value": "PL",
+                    "displayValue": "Polish"
+                  },
+                  {
+                    "value": "PT",
+                    "displayValue": "Portugese"
+                  },
+                  {
+                    "value": "RO",
+                    "displayValue": "Romanian"
+                  },
+                  {
+                    "value": "RU",
+                    "displayValue": "Russian"
+                  },
+                  {
+                    "value": "SR",
+                    "displayValue": "Serbian"
+                  },
+                  {
+                    "value": "SK",
+                    "displayValue": "Slovak"
+                  },
+                  {
+                    "value": "SL",
+                    "displayValue": "Slovenian"
+                  },
+                  {
+                    "value": "ES",
+                    "displayValue": "Spanish"
+                  },
+                  {
+                    "value": "SV",
+                    "displayValue": "Swedish"
+                  },
+                  {
+                    "value": "TH",
+                    "displayValue": "Thai"
+                  },
+                  {
+                    "value": "TR",
+                    "displayValue": "Turkish"
+                  },
+                  {
+                    "value": "UK",
+                    "displayValue": "Ukrainian"
+                  },
+                  {
+                    "value": "VI",
+                    "displayValue": "Vietnamese"
+                  }
+                ],
+                "valueValidators": [
+                  {
+                    "type": "NON_EMPTY"
+                  }
+                ],
+                "macrosInSelect": true
+              }
+            ],
+            "enablingConditions": [
+              {
+                "paramName": "language_settings",
+                "paramValue": "different_for_specific_domain",
+                "type": "EQUALS"
+              }
+            ],
+            "help": "Domain value should be a canonical domain.\nIt should match with domain from consent solution available in CMP dashboard."
+          }
+        ]
       }
-    ]
+    ],
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "inject_script",
+        "paramValue": true,
+        "type": "EQUALS"
+      }
+    ],
+    "help": "By GTM variable: Here you can add dynamic languages based on custom variable, e.g. Custom JavaScript.\n\nDifferent language for specific domain: This option allows you to add different languages for specific domains (Note: You have to provide canonical domain without \"https://\", \"http://\" and \"www\", e.g. my-domain.com)"
   },
   {
     "type": "SELECT",
     "name": "language",
-    "displayName": "Language",
-    "macrosInSelect": false,
+    "displayName": "Default  Language",
+    "macrosInSelect": true,
     "selectItems": [
       {
         "value": "SQ",
@@ -369,6 +491,163 @@ ___TEMPLATE_PARAMETERS___
         "displayValue": "Vietnamese"
       }
     ],
+    "simpleValueType": true,
+    "enablingConditions": [
+      {
+        "paramName": "inject_script",
+        "paramValue": true,
+        "type": "EQUALS"
+      }
+    ]
+  },
+  {
+    "type": "PARAM_TABLE",
+    "name": "defaultSettings",
+    "displayName": "Default consent settings",
+    "paramTableColumns": [
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "ad_user_data",
+          "displayName": "Ad user data",
+          "macrosInSelect": true,
+          "selectItems": [
+            {
+              "value": "denied",
+              "displayValue": "denied"
+            },
+            {
+              "value": "granted",
+              "displayValue": "granted"
+            }
+          ],
+          "simpleValueType": true
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "ad_personalization",
+          "displayName": "Ad personalization",
+          "macrosInSelect": true,
+          "selectItems": [
+            {
+              "value": "denied",
+              "displayValue": "denied"
+            },
+            {
+              "value": "granted",
+              "displayValue": "granted"
+            }
+          ],
+          "simpleValueType": true
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "ad_storage",
+          "displayName": "Ad storage",
+          "macrosInSelect": true,
+          "selectItems": [
+            {
+              "value": "denied",
+              "displayValue": "denied"
+            },
+            {
+              "value": "granted",
+              "displayValue": "granted"
+            }
+          ],
+          "simpleValueType": true
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "analytics_storage",
+          "displayName": "Analytics storage",
+          "macrosInSelect": true,
+          "selectItems": [
+            {
+              "value": "denied",
+              "displayValue": "denied"
+            },
+            {
+              "value": "granted",
+              "displayValue": "granted"
+            }
+          ],
+          "simpleValueType": true
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "functionality_storage",
+          "displayName": "Functionality storage",
+          "macrosInSelect": true,
+          "selectItems": [
+            {
+              "value": "denied",
+              "displayValue": "denied"
+            },
+            {
+              "value": "granted",
+              "displayValue": "granted"
+            }
+          ],
+          "simpleValueType": true
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "SELECT",
+          "name": "personalization_storage",
+          "displayName": "Personalization storage",
+          "macrosInSelect": true,
+          "selectItems": [
+            {
+              "value": "denied",
+              "displayValue": "denied"
+            },
+            {
+              "value": "granted",
+              "displayValue": "granted"
+            }
+          ],
+          "simpleValueType": true
+        },
+        "isUnique": false
+      },
+      {
+        "param": {
+          "type": "TEXT",
+          "name": "region",
+          "displayName": "Region(s) (leave blank to have consent apply to all regions)",
+          "simpleValueType": true,
+          "help": "If you\u0027d like to set the same custom settings for more than one region, you can write multiple region codes separated by comma (e.g. ES,US,DA)",
+          "valueHint": "E.g. DA,EN,US"
+        },
+        "isUnique": true
+      }
+    ]
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "ads_data_redaction",
+    "checkboxText": "Redact Ads Data",
+    "simpleValueType": true
+  },
+  {
+    "type": "CHECKBOX",
+    "name": "url_passthrough",
+    "checkboxText": "Pass through URL parameters",
     "simpleValueType": true
   },
   {
@@ -391,6 +670,7 @@ ___SANDBOXED_JS_FOR_WEB_TEMPLATE___
 const setDefaultConsentState = require('setDefaultConsentState');
 const updateConsentState = require('updateConsentState');
 const callInWindow = require('callInWindow');
+const getUrl = require('getUrl');
 const gtagSet = require('gtagSet');
 const getCookieValues = require('getCookieValues');
 const JSON = require('JSON');
@@ -398,6 +678,31 @@ const makeInteger = require('makeInteger');
 const injectScript = require('injectScript');
 const encodeUriComponent = require('encodeUriComponent');
 const queryPermission = require('queryPermission');
+
+ const getLanguage = function() {
+     const defaultLanguage = data.language;
+     const language_settings = data.language_settings;
+     const languageData = data[language_settings];
+
+    // returns default language when "none" option is chosen
+    // or when any option target has falsy value
+    if(language_settings === "none" || !languageData) return defaultLanguage;
+
+    // handles languages for each provided domain
+    if(language_settings === "different_for_specific_domain") {
+      const websiteCanonicalDomain = getUrl("href");
+
+      const matchedLanguage = languageData.filter(function(el) {
+        return websiteCanonicalDomain.indexOf(el.domain_column) !== -1;
+      });
+      return matchedLanguage.length !== 0 ? matchedLanguage[0].language_column : defaultLanguage;
+
+    }
+
+    // returns language from GTM variable
+    return data[language_settings];
+  };
+
 /*
  *   Called when consent changes. Assumes that consent object contains keys which
  *   directly correspond to Google consent types.
@@ -454,7 +759,6 @@ const handleDefaultsSettingsWithRegions = (settingsRows) => {
      setDefaultConsentState(globalDefaultSettings);
    }
 };
-
 /*
  *   Executes the default command, sets the developer ID
  */
@@ -502,7 +806,9 @@ const main = () => {
 setDefaults();
 
 if (data.inject_script) {
-  const scriptUrl = 'https://policy.app.cookieinformation.com/uc.js?language=' + encodeUriComponent(data.language || 'default') + '&gcmEnabledByConsentLibrary=false';
+  const domainLanguage = getLanguage();
+  const scriptUrl = 'https://policy.app.cookieinformation.com/uc.js?language=' + encodeUriComponent(domainLanguage || 'default') + '&gcmEnabledByConsentLibrary=false';
+
   if(queryPermission('inject_script', scriptUrl)) injectScript(scriptUrl, main, data.gtmOnFailure);
   else data.gtmOnFailure();
 } else {
@@ -975,6 +1281,34 @@ ___WEB_PERMISSIONS___
                 "string": "https://*.cookieinformation.com/"
               }
             ]
+          }
+        }
+      ]
+    },
+    "clientAnnotations": {
+      "isEditedByUser": true
+    },
+    "isRequired": true
+  },
+  {
+    "instance": {
+      "key": {
+        "publicId": "get_url",
+        "versionId": "1"
+      },
+      "param": [
+        {
+          "key": "urlParts",
+          "value": {
+            "type": 1,
+            "string": "any"
+          }
+        },
+        {
+          "key": "queriesAllowed",
+          "value": {
+            "type": 1,
+            "string": "any"
           }
         }
       ]

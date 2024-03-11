@@ -11,7 +11,7 @@ ___INFO___
 {
   "type": "TAG",
   "id": "cookieinformation",
-  "version": 2,
+  "version": 1,
   "securityGroups": [],
   "displayName": "Cookie Information + Consent Mode v2",
   "brand": {

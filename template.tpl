@@ -787,18 +787,6 @@ const setDefaults = () => {
  * Sets up the consent update callback
  */
 const main = () => {
-  if (getCookieValues("CookieInformationConsent").toString() !== '') {
-      const consentString = getCookieValues("CookieInformationConsent")[0];
-      const consent = JSON.parse(consentString);
-      const consentsApproved = consent.consents_approved;
-      let consentTypes = {};
-      let category = '';
-      for (let i = 0; i < consentsApproved.length; ++i) {
-        category = consentsApproved[i];
-        consentTypes[category] = true;
-      }
-      onUserConsent(consentTypes);
-   }
   callInWindow('CookieInformation.addCustomEventListenerForGTMConsentModeTemplate', onUserConsent);
   data.gtmOnSuccess();
 };

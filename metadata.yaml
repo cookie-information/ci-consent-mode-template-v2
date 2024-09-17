@@ -1,6 +1,8 @@
 homepage: "https://cookieinformation.com/"
 documentation: "https://support.cookieinformation.com/en/"
 versions:
+  - sha: 189255468e78553846803d5b602cca7cfb808dec
+    changeNotes: Remove reading consent cookie directly and react only to events (single source of truth)
   - sha: 4d809156924f08a0b0f08b297db73164eb2d2854
     changeNotes: Added multi-language support
   - sha: f0004c012350235508fc7af466b31845f21999c2

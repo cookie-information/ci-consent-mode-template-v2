@@ -19,12 +19,80 @@ ___INFO___
     "displayName": "Cookie Information",
     "thumbnail": "data:image/jpeg;base64,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\u003d"
   },
-  "description": "Collect user consent and share the signals correctly with Google to ensure the well-functioning of your Google Ads, Google Analytics, and Google Marketing Platform in EEA region.",
+  "description": "Add the Cookie Information CMP to block cookies before consent, scan for new trackers, flag hidden scripts and keep a complete audit trail, from day one. Pass the right signals to Google Ads, Google Analytics and Google Marketing Platform. Covers GDPR, ePrivacy, CCPA and national cookie rules across the EU and EEA. More on https://cookieinformation.com.",
   "containerContexts": [
     "WEB"
   ]
 }
 
+
+___VENDOR_DETAILS___
+
+{
+  "preview": [
+    "data:image/png;base64,base64-encoded-images-of-ui-and-popup"
+  ],
+  "vendorName": "Cookie Information",
+  "description": "<b>Google CMP Gold Partner</b>, so Consent Mode v2 signals reach Google Ads and GA4 correctly from day one. Every consent stored on <b>EU servers</b> with timestamps and export for audits. <b>Full banner customization</b> for web and mobile apps, in 44+ languages. Live in 5 minutes, no developer.",
+  "homepageUrl": "https://cookieinformation.com/",
+  "termsAndConditionsUrl": "https://cookieinformation.com/terms/",
+  "freeTrial": "14-day free trial",
+  "freeTier": "No",
+  "price": "<b>Try every feature free for 14 days</b><br> No credit card required <br><br> <ul><li>From €19.50 per domain, per month</li><li>Cookie blocking, scanning, audit-ready records and Consent Mode v2 on every plan</li><li>Higher plans add scanning depth and daily scans</li><li>Add privacy-friendly analytics from €36 per month and recover up to 4x more sessions</li></ul>",
+  "countries": "No limitations",
+  "languages": [
+    'ar',
+    'bg',
+    'ca',
+    'cs',
+    'da',
+    'de',
+    'el',
+    'en',
+    'es',
+    'et',
+    'fi',
+    'fr',
+    'he',
+    'hi',
+    'hr',
+    'hu',
+    'id',
+    'is',
+    'it',
+    'ja',
+    'kl',
+    'ko',
+    'lt',
+    'lv',
+    'ms',
+    'nb',
+    'nl',
+    'nn',
+    'no',
+    'pl',
+    'pt',
+    'ro',
+    'ru',
+    'sk',
+    'sl',
+    'sq',
+    'sr',
+    'sv',
+    'th',
+    'tr',
+    'tw',
+    'uk',
+    'vi',
+    'zh'
+  ],
+  "platforms": [
+    "WEB",
+    "IOS",
+    "ANDROID"
+  ],
+  "defaultSettingsUrl": "https://support.cookieinformation.com/articles/google-consent-mode-v2/default-consent-popup-settings/"
+}
 
 ___TEMPLATE_PARAMETERS___
 
